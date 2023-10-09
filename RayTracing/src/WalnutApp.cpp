@@ -11,19 +11,36 @@ public:
 	virtual void OnUIRender() override
 	{
 		ImGui::Begin("Settings");
+		ImGui::Text("Last render: %.3fms", m_LastRenderTime);
 		if (ImGui::Button("Render"))
 		{
 			Render();
 		}
 		ImGui::End();
 
-		ImGui::ShowDemoWindow();
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+		ImGui::Begin("Viewport");
+
+		m_ViewportWidth = ImGui::GetContentRegionAvail().x;
+		m_ViewportHeight = ImGui::GetContentRegionAvail().y;
+
+		if (m_Image)
+			ImGui::Image(m_Image->GetDescriptorSet(), { (float)m_Image->GetWidth(), (float)m_Image->GetHeight() });
+
+		ImGui::End();
+		ImGui::PopStyleVar();
+
+		Render();
 	}
 	void Render()
 	{
 	}
 private:
 	std::shared_ptr<Image> m_Image;
+	uint32_t* m_ImageData = nullptr;
+	uint32_t m_ViewportWidth = 0, m_ViewportHeight = 0;
+
+	float m_LastRenderTime = 0.0f;
 };
 
 Walnut::Application* Walnut::CreateApplication(int argc, char** argv)
