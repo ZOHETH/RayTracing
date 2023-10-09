@@ -3,23 +3,33 @@
 
 #include "Walnut/Image.h"
 
+using namespace Walnut;
+
 class ExampleLayer : public Walnut::Layer
 {
 public:
 	virtual void OnUIRender() override
 	{
-		ImGui::Begin("Hello");
-		ImGui::Button("Button");
+		ImGui::Begin("Settings");
+		if (ImGui::Button("Render"))
+		{
+			Render();
+		}
 		ImGui::End();
 
 		ImGui::ShowDemoWindow();
 	}
+	void Render()
+	{
+	}
+private:
+	std::shared_ptr<Image> m_Image;
 };
 
 Walnut::Application* Walnut::CreateApplication(int argc, char** argv)
 {
 	Walnut::ApplicationSpecification spec;
-	spec.Name = "Walnut Example";
+	spec.Name = "Ray Tracing";
 
 	Walnut::Application* app = new Walnut::Application(spec);
 	app->PushLayer<ExampleLayer>();
